@@ -50,7 +50,7 @@ data "talos_machine_configuration" "this" {
               addresses = ["${each.value.address}/16"]
               routes = [
                 {
-                  network = var.network
+                  network = "0.0.0.0/0"
                   gateway = var.gateway
                   metric  = 1024
                 }

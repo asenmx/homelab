@@ -6,7 +6,7 @@ resource "routeros_ip_pool" "office" {
 
 resource "routeros_ip_dhcp_server" "office" {
   address_pool     = routeros_ip_pool.office.name
-  interface        = "bridge"
+  interface        = "bridgeLocal"
   name             = "office"
   bootp_lease_time = "forever"
   disabled         = false

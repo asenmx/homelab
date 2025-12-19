@@ -27,11 +27,6 @@ variable "nodes" {
   }))
 }
 
-variable "network" {
-  description = "Pod / service network CIDR"
-  type        = string
-}
-
 variable "gateway" {
   description = "Default gateway"
   type        = string
