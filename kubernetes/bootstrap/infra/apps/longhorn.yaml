@@ -13,7 +13,7 @@ spec:
     path: kubernetes/charts/infra/longhorn
     helm:
       valueFiles:
-        - ../../../values/infra/longhorn/values.yaml
+        - ../../../../values/infra/longhorn/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn
