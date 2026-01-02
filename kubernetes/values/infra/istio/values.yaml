@@ -7,4 +7,3 @@ istiod:
 
 gateway:
   enabled: true         
-  namespace: istio-ingress
