@@ -32,6 +32,17 @@ spec:
       helm:
         valueFiles:
           - ../../../../values/infra/istio/ztunnel/values.yaml
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istio-validator-istio-system
+      jsonPointers:
+        - /webhooks/0/failurePolicy
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istiod-default-validator
+      jsonPointers:
+        - /webhooks/0/failurePolicy
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
