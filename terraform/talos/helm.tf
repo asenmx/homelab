@@ -72,6 +72,10 @@ resource "helm_release" "cilium" {
     name  = "cluster.name"
     value = "homelab"
   }
+  set {
+    name  = "cni.exclusive"
+    value = "false"
+  }
 }
 resource "helm_release" "argocd" {
   name             = "argocd"
