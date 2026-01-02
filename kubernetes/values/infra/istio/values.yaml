@@ -4,4 +4,7 @@ base:
 
 istiod:
   enabled: true
+  serviceAccount:
+    create: true
+    name: istiod
 
