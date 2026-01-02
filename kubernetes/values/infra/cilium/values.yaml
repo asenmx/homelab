@@ -1,5 +1,4 @@
 cilium:
-  asjdkofjsadkfjas
   ipam:
     mode: kubernetes
 
