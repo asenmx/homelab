@@ -44,10 +44,9 @@ spec:
       jsonPointers:
         - /webhooks/0/failurePolicy
     - group: apps
-      kind: Deployment
+      kind: DaemonSet
       name: ztunnel
-      jsonPointers:
-      jqPathExpressions:                                                                                                                                                                                                                                        
+      jqPathExpressions:
         - '.spec.template.spec.containers[].env[]?.valueFrom.resourceFieldRef.divisor'
   destination:
     server: https://kubernetes.default.svc
