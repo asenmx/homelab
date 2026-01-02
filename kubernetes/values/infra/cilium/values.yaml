@@ -40,3 +40,10 @@ cilium:
 
   cluster:
     name: homelab
+  socketLB:
+    hostNamespaceOnly: true
+  cni:
+    exclusive: false
+
+  bgpControlPlane:
+    enabled: true
