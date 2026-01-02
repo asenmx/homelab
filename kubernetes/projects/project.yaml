@@ -21,3 +21,4 @@ spec:
   - https://github.com/asenmx/homelab
   - https://charts.longhorn.io/
   - https://prometheus-community.github.io/helm-charts
+  - oci://quay.io/jetstack/charts

@@ -1,75 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: infra
+  name: infra 
   namespace: argocd
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
-    - list:
-        elements:
-          - name: cert-manager
-            namespace: cert-manager
-            project: infra
-            chartName: cert-manager
-            chartRepo: oci://quay.io/jetstack/charts
-            chartVersion: v1.19.2
-            valuesFile: infra/cert-manager/prod.yaml
-            syncWave: -1
-
-          - name: longhorn
-            namespace: infra
-            project: infra
-            chartName: longhorn
-            chartRepo: https://charts.longhorn.io/
-            chartVersion: v1.10.1
-            valuesFile: infra/longhorn/prod.yaml
-            privileged: "true"
-
-          - name: prometheus
-            namespace: monitoring
-            project: infra
-            chartName: kube-prometheus-stack
-            chartRepo: https://prometheus-community.github.io/helm-charts
-            chartVersion: 80.5.0
-            valuesFile: infra/prometheus/prod.yaml
-            privileged: "true"
-
+    - git:
+        repoURL: https://github.com/asenmx/homelab.git 
+        revision: test
+        directories:
+          - path: kubernetes/charts/*
   template:
     metadata:
-      name: "{{name}}"
-      finalizers:
-        - resources-finalizer.argocd.argoproj.io
-      annotations:
-        argocd.argoproj.io/sync-wave: "{{syncWave | default 0}}"
-
+      name: '{{.path.basename}}'
     spec:
-      project: "{{project}}"
-
+      project: infra
+      source:
+        repoURL: '{{.git.repoURL}}'
+        targetRevision: '{{.git.revision}}'
+        chart: '{{.path.basename}}'
+        helm:
+          valueFiles:
+            - 'kubernetes/values/{{.path.basename}}.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: "{{namespace}}"
-
-      sources:
-        - chart: "{{chartName}}"
-          repoURL: "{{chartRepo}}"
-          targetRevision: "{{chartVersion}}"
-          helm:
-            valueFiles:
-              - "$values/kubernetes/values/{{valuesFile}}"
-
-        - repoURL: https://github.com/asenmx/homelab
-          targetRevision: test
-          ref: values
-
+        namespace: '{{.path.basename}}'
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
         syncOptions:
           - CreateNamespace=true
-          - ServerSideApply=true
-
-      managedNamespaceMetadata:
-        labels:
-          pod-security.kubernetes.io/enforce: "{{privileged | default 'baseline'}}"
-
