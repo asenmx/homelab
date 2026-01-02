@@ -12,46 +12,21 @@ spec:
         revision: test
         directories:
           - path: kubernetes/charts/infra/*
-  # Optional rolling sync strategy
-  # strategy:
-  #   type: RollingSync
-  #   deletionOrder: Reverse
-  #   rollingSync:
-  #     steps:
-  #       - matchExpressions:
-  #           - key: envLabel
-  #             operator: In
-  #             values:
-  #               - env-dev
-  #       - matchExpressions:
-  #           - key: envLabel
-  #             operator: In
-  #             values:
-  #               - env-qa
-  #         maxUpdate: 0
-  #       - matchExpressions:
-  #           - key: envLabel
-  #             operator: In
-  #             values:
-  #               - env-infra
-  #         maxUpdate: 10%
+          - path: kubernetes/manifets/*
   template:
     metadata:
-      name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
+      name: '{{index .path.segments 1}}-{{index .path.segments 1}}'
       labels:
-        chart: '{{index .path.segments 3}}'
+        chart: '{{index .path.segments 2}}'
     spec:
       project: infra
       source:
         repoURL: https://github.com/asenmx/homelab.git
         targetRevision: test
         path: '{{.path.path}}'
-        helm:
-          valueFiles:
-            - '../../../values/infra/{{index .path.segments 3}}/values.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{index .path.segments 3}}'
+        namespace: '{{index .path.segments 2}}'
       syncPolicy:
         automated:
           prune: true

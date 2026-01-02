@@ -13,20 +13,20 @@ spec:
         directories:
           - path: kubernetes/charts/prod/*
   strategy:
-  type: RollingSync
-  deletionOrder: Reverse
-  rollingSync:
-    steps:
-      - matchExpressions:
-          - key: chart
-            operator: In
-            values:
-              - jellyfin
-      - matchExpressions:
-          - key: chart
-            operator: In
-            values:
-              - ollama
+    type: RollingSync
+    deletionOrder: Reverse
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: chart
+              operator: In
+              values:
+                - ollama
+        - matchExpressions:
+            - key: chart
+              operator: In
+              values:
+                - jellyfin
   template:
     metadata:
       name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
