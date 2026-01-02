@@ -5,5 +5,3 @@ base:
 istiod:
   enabled: true
 
-gateway:
-  enabled: true         
