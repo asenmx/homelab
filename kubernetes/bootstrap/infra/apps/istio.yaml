@@ -43,6 +43,11 @@ spec:
       name: istiod-default-validator
       jsonPointers:
         - /webhooks/0/failurePolicy
+    - group: apps
+      kind: Deployment
+      name: ztunnel
+      jsonPointers:
+        - /spec/template/spec/containers/0/env/15/valueFrom/resourceFieldRef/divisor
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
