@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn
+  name: argocd 
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "0"
@@ -10,13 +10,13 @@ spec:
   source:
     repoURL: https://github.com/asenmx/homelab.git
     targetRevision: test
-    path: kubernetes/charts/infra/longhorn
+    path: kubernetes/charts/infra/argocd
     helm:
       valueFiles:
-        - ../../../../values/infra/longhorn/values.yaml
+        - ../../../../values/infra/argocd/values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: longhorn
+    namespace: test
   syncPolicy:
     automated:
       prune: true
