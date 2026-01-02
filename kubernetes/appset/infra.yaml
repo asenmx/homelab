@@ -1,32 +1,63 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: infra 
+  name: infra
   namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-    - git:
-        repoURL: https://github.com/asenmx/homelab.git 
-        revision: test
-        directories:
-          - path: kubernetes/charts/*
+  - git:
+      repoURL: https://github.com/asenmx/homelab.git
+      revision: test
+      directories:
+      - path: kubernetes/charts/*
+  strategy:
+    type: RollingSync
+    deletionOrder: Reverse # Applications will be deleted in reverse order of steps
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: envLabel
+              operator: In
+              values:
+                - env-dev
+          #maxUpdate: 100%  # if undefined, all applications matched are updated together (default is 100%)
+        - matchExpressions:
+            - key: envLabel
+              operator: In
+              values:
+                - env-qa
+          maxUpdate: 0 # if 0, no matched applications will be updated
+        - matchExpressions:
+            - key: envLabel
+              operator: In
+              values:
+                - env-prod
+          maxUpdate: 10% # maxUpdate supports both integer and percentage string values (rounds down, but floored at 1 Application for >0%)
+
   template:
     metadata:
-      name: '{{.path.basename}}'
+      name: '{{index .path.segments 1}}-{{index .path.segments 2}}'
+      labels:
+        chart: '{{index .path.segments 2}}'
     spec:
       project: infra
       source:
-        repoURL: '{{.git.repoURL}}'
-        targetRevision: '{{.git.revision}}'
-        chart: '{{.path.basename}}'
+        repoURL: https://github.com/asenmx/homelab.git
+        targetRevision: test
+        path: '{{.path.path}}'
         helm:
           valueFiles:
-            - 'kubernetes/values/{{.path.basename}}.yaml'
+            - '../../values/infra/{{index .path.segments 2}}/prod.yaml'
+
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.path.basename}}'
+        namespace: '{{index .path.segments 1}}-{{index .path.segments 2}}'
       syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
+
