@@ -49,6 +49,7 @@ spec:
         helm:
           valueFiles:
             - '../../values/prod/{{index .path.segments 2}}/prod.yaml'
+
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{index .path.segments 1}}-{{index .path.segments 2}}'
