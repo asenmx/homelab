@@ -7,13 +7,25 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   project: infra
-  source:
-    repoURL: https://github.com/asenmx/homelab.git
-    targetRevision: test
-    path: kubernetes/charts/infra/istio
-    helm:
-      valueFiles:
-        - ../../../values/infra/istio/values.yaml
+  sources:
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: test
+      path: kubernetes/charts/infra/istio/base
+      helm:
+        valueFiles:
+          - ../../../values/infra/istio/base/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: test
+      path: kubernetes/charts/infra/istio/istiod
+      helm:
+        valueFiles:
+          - ../../../values/infra/istio/istiod/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: test
+      path: kubernetes/charts/infra/istio/gateway
+      helm:
+        valueFiles:
+          - ../../../values/infra/istio/gateway/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
@@ -24,3 +36,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+

@@ -1,7 +1,3 @@
-base:
-  enabled: true
-  defaultRevision: default
-
 istiod:
   enabled: true
   serviceAccount:

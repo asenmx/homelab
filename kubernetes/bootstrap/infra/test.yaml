@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: istio
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: istio-base
+            chart: base
+            chartRepo: https://istio-release.storage.googleapis.com/charts
+            valuesFile: ../../values/infra/istio/values.yaml
+            wave: "0"
+          - name: istiod
+            chart: istiod
+            chartRepo: https://istio-release.storage.googleapis.com/charts
+            valuesFile: ../../values/infra/istio/values.yaml
+            wave: "1"
+          - name: gateway
+            chart: gateway
+            chartRepo: https://istio-release.storage.googleapis.com/charts
+            valuesFile: ../../values/infra/istio/values.yaml
+            wave: "2"
+  template:
+    metadata:
+      name: '{{name}}'
+      labels:
+        app.kubernetes.io/part-of: istio
+    spec:
+      project: infra
+      source:
+        repoURL: '{{chartRepo}}'   # Helm repo URL
+        chart: '{{chart}}'
+        targetRevision: 1.28.2      # Istio version
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: istio-system
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
