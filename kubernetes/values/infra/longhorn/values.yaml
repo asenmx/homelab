@@ -1,4 +1,3 @@
 longhorn:
-  longhorn:
-    preUpgradeChecker:
-      jobEnabled: false
+  preUpgradeChecker:
+    jobEnabled: false
