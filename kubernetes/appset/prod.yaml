@@ -12,29 +12,21 @@ spec:
         revision: test
         directories:
           - path: kubernetes/charts/prod/*
-  # Optional rolling sync strategy
-  # strategy:
-  #   type: RollingSync
-  #   deletionOrder: Reverse
-  #   rollingSync:
-  #     steps:
-  #       - matchExpressions:
-  #           - key: envLabel
-  #             operator: In
-  #             values:
-  #               - env-dev
-  #       - matchExpressions:
-  #           - key: envLabel
-  #             operator: In
-  #             values:
-  #               - env-qa
-  #         maxUpdate: 0
-  #       - matchExpressions:
-  #           - key: envLabel
-  #             operator: In
-  #             values:
-  #               - env-prod
-  #         maxUpdate: 10%
+  strategy:
+  type: RollingSync
+  deletionOrder: Reverse
+  rollingSync:
+    steps:
+      - matchExpressions:
+          - key: chart
+            operator: In
+            values:
+              - jellyfin
+      - matchExpressions:
+          - key: chart
+            operator: In
+            values:
+              - ollama
   template:
     metadata:
       name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
