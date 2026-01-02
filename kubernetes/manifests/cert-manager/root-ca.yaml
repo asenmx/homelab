@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: root-ca
+  namespace: cert-manager
+spec:
+  isCA: true                   
+  secretName: root-ca-secret  
+  duration: 87600h           
+  renewBefore: 720h         
+  commonName: root-ca
+  issuerRef:
+    name: root-ca-issuer
+    kind: ClusterIssuer
+
