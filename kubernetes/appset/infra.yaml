@@ -12,12 +12,12 @@ spec:
         revision: test
         directories:
           - path: kubernetes/charts/infra/*
-          - path: kubernetes/manifets/*
+          - path: kubernetes/manifests/*
   template:
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 1}}'
+      name: '{{index .path.segments 2}}'
       labels:
-        chart: '{{index .path.segments 2}}'
+        type: '{{if contains .path.path "charts"}}helm{{else}}yaml{{end}}'
     spec:
       project: infra
       source:
