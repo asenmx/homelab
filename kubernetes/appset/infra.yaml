@@ -12,10 +12,10 @@ spec:
         revision: test
         directories:
           - path: kubernetes/charts/infra/*
-          - path: kubernetes/manifests/*
+          - path: kubernetes/manifests/*/*
   template:
     metadata:
-      name: '{{index .path.segments 2}}'
+      name: '{{index .path.segments 3}}'
       labels:
         type: '{{if contains .path.path "charts"}}helm{{else}}yaml{{end}}'
     spec:
@@ -24,9 +24,12 @@ spec:
         repoURL: https://github.com/asenmx/homelab.git
         targetRevision: test
         path: '{{.path.path}}'
+        helm:
+          valueFiles:
+            - '../../../values/infra/{{index .path.segments 3}}/prod.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{index .path.segments 2}}'
+        namespace: '{{index .path.segments 3}}'
       syncPolicy:
         automated:
           prune: true
