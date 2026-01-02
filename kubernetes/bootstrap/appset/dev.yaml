@@ -29,7 +29,6 @@ spec:
             - '../../../values/infra/{{index .path.segments 3}}/prod.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{index .path.segments 3}}'
       syncPolicy:
         automated:
           prune: true
