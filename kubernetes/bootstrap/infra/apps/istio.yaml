@@ -22,10 +22,16 @@ spec:
           - ../../../../values/infra/istio/istiod/values.yaml
     - repoURL: https://github.com/asenmx/homelab.git
       targetRevision: test
-      path: kubernetes/charts/infra/istio/gateway
+      path: kubernetes/charts/infra/istio/cni
       helm:
         valueFiles:
-          - ../../../../values/infra/istio/gateway/values.yaml
+          - ../../../../values/infra/istio/cni/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: test
+      path: kubernetes/charts/infra/istio/ztunnel
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/ztunnel/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system

@@ -4,7 +4,7 @@ version: 0.0.0
 type: application
 
 dependencies:
-  - name: gateway
+  - name: ztunnel 
     version: 1.28.2
     repository: https://istio-release.storage.googleapis.com/charts
 

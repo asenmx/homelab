@@ -1,3 +1,2 @@
-istiod:
+cni:
   profile: ambient
-
