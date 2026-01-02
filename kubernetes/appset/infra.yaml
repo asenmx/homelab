@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: cert-manager
+            namespace: cert-manager
+            project: infra
+            chartType: oci
+            chartName: cert-manager
+            chartRepo: oci://quay.io/jetstack/charts
+            chartVersion: v1.19.2
+            valuesFile: cert-manager.yaml
+
+          - name: longhorn
+            namespace: infra
+            project: infra
+            chartType: remote
+            chartName: longhorn
+            chartRepo: https://charts.longhorn.io/
+            chartVersion: v1.10.1
+            valuesFile: longhorn.yaml
+            privileged: "true"
+
+          - name: prometheus
+            namespace: monitoring
+            project: infra
+            chartType: remote
+            chartName: kube-prometheus-stack
+            chartRepo: https://prometheus-community.github.io/helm-charts
+            chartVersion: 80.5.0
+            valuesFile: prometheus.yaml
+            privileged: "true"
+
+  template:
+    metadata:
+      name: "{{name}}"
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: "{{project}}"
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{namespace}}"
+
+      sources:
+        - chart: "{{chartName}}"
+          repoURL: "{{chartRepo}}"
+          targetRevision: "{{chartVersion}}"
+          helm:
+            valueFiles:
+              - "$values/kubernetes/values/{{valuesFile}}"
+          when: '{{chartType}} == "oci"'
+
+        - chart: "{{chartName}}"
+          repoURL: "{{chartRepo}}"
+          targetRevision: "{{chartVersion}}"
+          helm:
+            valueFiles:
+              - "$values/kubernetes/values/{{valuesFile}}"
+          when: '{{chartType}} == "remote"'
+
+        - repoURL: https://github.com/asenmx/homelab
+          targetRevision: test
+          ref: values
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+

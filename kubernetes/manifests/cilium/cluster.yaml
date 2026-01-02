@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: cilium-bgp
+spec:
+  nodeSelector:
+    matchLabels:
+      bgpnode: "active"
+  bgpInstances:
+  - name: instance-65000
+    localASN: 65000
+    peers:
+    - name: mikrotik 
+      peerASN: 65001
+      peerAddress: 10.0.0.1
+      peerConfigRef:
+        name: cilium-peer
