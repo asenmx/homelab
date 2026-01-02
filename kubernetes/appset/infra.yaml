@@ -10,30 +10,28 @@ spec:
           - name: cert-manager
             namespace: cert-manager
             project: infra
-            chartType: oci
             chartName: cert-manager
             chartRepo: oci://quay.io/jetstack/charts
             chartVersion: v1.19.2
-            valuesFile: cert-manager.yaml
+            valuesFile: infra/cert-manager/prod.yaml
+            syncWave: -1
 
           - name: longhorn
             namespace: infra
             project: infra
-            chartType: remote
             chartName: longhorn
             chartRepo: https://charts.longhorn.io/
             chartVersion: v1.10.1
-            valuesFile: longhorn.yaml
+            valuesFile: infra/longhorn/prod.yaml
             privileged: "true"
 
           - name: prometheus
             namespace: monitoring
             project: infra
-            chartType: remote
             chartName: kube-prometheus-stack
             chartRepo: https://prometheus-community.github.io/helm-charts
             chartVersion: 80.5.0
-            valuesFile: prometheus.yaml
+            valuesFile: infra/prometheus/prod.yaml
             privileged: "true"
 
   template:
@@ -41,6 +39,9 @@ spec:
       name: "{{name}}"
       finalizers:
         - resources-finalizer.argocd.argoproj.io
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{syncWave | default 0}}"
+
     spec:
       project: "{{project}}"
 
@@ -55,15 +56,6 @@ spec:
           helm:
             valueFiles:
               - "$values/kubernetes/values/{{valuesFile}}"
-          when: '{{chartType}} == "oci"'
-
-        - chart: "{{chartName}}"
-          repoURL: "{{chartRepo}}"
-          targetRevision: "{{chartVersion}}"
-          helm:
-            valueFiles:
-              - "$values/kubernetes/values/{{valuesFile}}"
-          when: '{{chartType}} == "remote"'
 
         - repoURL: https://github.com/asenmx/homelab
           targetRevision: test
@@ -76,4 +68,8 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ServerSideApply=true
+
+      managedNamespaceMetadata:
+        labels:
+          pod-security.kubernetes.io/enforce: "{{privileged | default 'baseline'}}"
 
