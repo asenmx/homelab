@@ -16,7 +16,7 @@ spec:
         - ../../../values/infra/istio/values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: istio
+    namespace: istio-system
   syncPolicy:
     automated:
       prune: true
