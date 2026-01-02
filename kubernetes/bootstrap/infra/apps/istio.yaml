@@ -32,6 +32,9 @@ spec:
       helm:
         valueFiles:
           - ../../../../values/infra/istio/ztunnel/values.yaml
+    - repoURL: https://github.com/kubernetes-sigs/gateway-api
+      targetRevision: release-1.4
+      path: config/crd/standard
   ignoreDifferences:
     - group: admissionregistration.k8s.io
       kind: ValidatingWebhookConfiguration
