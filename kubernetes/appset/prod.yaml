@@ -7,14 +7,15 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/asenmx/homelab.git
-      revision: test
-      directories:
-      - path: kubernetes/charts/prod/*
+    - git:
+        repoURL: https://github.com/asenmx/homelab.git
+        revision: test
+        directories:
+          - path: kubernetes/charts/prod/*
+  # Optional rolling sync strategy
   # strategy:
   #   type: RollingSync
-  #   deletionOrder: Reverse # Applications will be deleted in reverse order of steps
+  #   deletionOrder: Reverse
   #   rollingSync:
   #     steps:
   #       - matchExpressions:
@@ -22,22 +23,21 @@ spec:
   #             operator: In
   #             values:
   #               - env-dev
-  #         #maxUpdate: 100%  # if undefined, all applications matched are updated together (default is 100%)
   #       - matchExpressions:
   #           - key: envLabel
   #             operator: In
   #             values:
   #               - env-qa
-  #         maxUpdate: 0 # if 0, no matched applications will be updated
+  #         maxUpdate: 0
   #       - matchExpressions:
   #           - key: envLabel
   #             operator: In
   #             values:
   #               - env-prod
-  #         maxUpdate: 10% # maxUpdate supports both integer and percentage string values (rounds down, but floored at 1 Application for >0%)
+  #         maxUpdate: 10%
   template:
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 2}}'
+      name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
       labels:
         chart: '{{index .path.segments 3}}'
     spec:
@@ -48,11 +48,10 @@ spec:
         path: '{{.path.path}}'
         helm:
           valueFiles:
-            - '../../values/prod/{{index .path.segments 3}}/prod.yaml'
-
+            - '../../../values/prod/{{index .path.segments 3}}/values.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{index .path.segments 1}}-{{index .path.segments 3}}'
+        namespace: '{{index .path.segments 3}}'
       syncPolicy:
         automated:
           prune: true
