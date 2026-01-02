@@ -1,0 +1,10 @@
+base:
+  enabled: true
+  defaultRevision: default
+
+istiod:
+  enabled: true
+
+gateway:
+  enabled: true         
+  namespace: istio-ingress
