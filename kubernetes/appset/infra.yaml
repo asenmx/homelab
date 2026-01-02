@@ -7,40 +7,39 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - git:
-      repoURL: https://github.com/asenmx/homelab.git
-      revision: test
-      directories:
-      - path: kubernetes/charts/*
-  strategy:
-    type: RollingSync
-    deletionOrder: Reverse # Applications will be deleted in reverse order of steps
-    rollingSync:
-      steps:
-        - matchExpressions:
-            - key: envLabel
-              operator: In
-              values:
-                - env-dev
-          #maxUpdate: 100%  # if undefined, all applications matched are updated together (default is 100%)
-        - matchExpressions:
-            - key: envLabel
-              operator: In
-              values:
-                - env-qa
-          maxUpdate: 0 # if 0, no matched applications will be updated
-        - matchExpressions:
-            - key: envLabel
-              operator: In
-              values:
-                - env-prod
-          maxUpdate: 10% # maxUpdate supports both integer and percentage string values (rounds down, but floored at 1 Application for >0%)
-
+    - git:
+        repoURL: https://github.com/asenmx/homelab.git
+        revision: test
+        directories:
+          - path: kubernetes/charts/infra/*
+  # Optional rolling sync strategy
+  # strategy:
+  #   type: RollingSync
+  #   deletionOrder: Reverse
+  #   rollingSync:
+  #     steps:
+  #       - matchExpressions:
+  #           - key: envLabel
+  #             operator: In
+  #             values:
+  #               - env-dev
+  #       - matchExpressions:
+  #           - key: envLabel
+  #             operator: In
+  #             values:
+  #               - env-qa
+  #         maxUpdate: 0
+  #       - matchExpressions:
+  #           - key: envLabel
+  #             operator: In
+  #             values:
+  #               - env-infra
+  #         maxUpdate: 10%
   template:
     metadata:
-      name: '{{index .path.segments 1}}-{{index .path.segments 2}}'
+      name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
       labels:
-        chart: '{{index .path.segments 2}}'
+        chart: '{{index .path.segments 3}}'
     spec:
       project: infra
       source:
@@ -49,10 +48,10 @@ spec:
         path: '{{.path.path}}'
         helm:
           valueFiles:
-            - 'kubernetes/values/{{index .path.segments 2}}/prod.yaml'
+            - '../../../values/infra/{{index .path.segments 3}}/values.yaml'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{index .path.segments 1}}-{{index .path.segments 2}}'
+        namespace: '{{index .path.segments 3}}'
       syncPolicy:
         automated:
           prune: true
