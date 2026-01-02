@@ -23,3 +23,4 @@ spec:
   - https://prometheus-community.github.io/helm-charts
   - oci://quay.io/jetstack/charts
   - https://istio-release.storage.googleapis.com/charts 
+  - https://github.com/kubernetes-sigs/gateway-api
