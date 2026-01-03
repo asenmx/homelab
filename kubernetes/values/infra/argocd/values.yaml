@@ -8,4 +8,4 @@ argo-cd:
       parentRefs:
         - name: istio-gateway
           namespace: istio-system
-          sectionName: http
+          sectionName: https
