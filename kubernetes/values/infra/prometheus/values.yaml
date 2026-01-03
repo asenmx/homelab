@@ -11,6 +11,8 @@ kube-prometheus-stack:
               requests:
                 storage: 50Gi
   grafana:
+    deploymentStrategy:
+      type: Recreate
     persistence:
       enabled: true
       storageClassName: longhorn
@@ -27,4 +29,5 @@ kube-prometheus-stack:
             resources:
               requests:
                 storage: 2Gi
+
 
