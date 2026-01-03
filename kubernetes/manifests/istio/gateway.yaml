@@ -7,13 +7,14 @@ spec:
   gatewayClassName: istio
   listeners:
     - name: https
+      hostname: "*.k8s.labz"
       protocol: HTTPS
       port: 443
-      allowedRoutes:
-        namespaces:
-          from: All
       tls:
         mode: Terminate
         certificateRefs:
           - name: k8s-wildcard-secret
             kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
