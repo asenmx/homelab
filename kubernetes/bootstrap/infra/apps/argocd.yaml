@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd 
+  name: argocd
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "0"
@@ -13,10 +13,10 @@ spec:
     path: kubernetes/charts/infra/argocd
     helm:
       valueFiles:
-        - ../../../../values/infra/argocd/values.yaml
+        - ../../../values/infra/argocd/values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: test
+    namespace: monitoring 
   syncPolicy:
     automated:
       prune: true
@@ -24,3 +24,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+

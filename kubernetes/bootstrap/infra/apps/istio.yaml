@@ -35,6 +35,9 @@ spec:
     - repoURL: https://github.com/kubernetes-sigs/gateway-api
       targetRevision: release-1.4
       path: config/crd/standard
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: test 
+      path: kubernetes/manifests/istio/
   ignoreDifferences:
     - group: admissionregistration.k8s.io
       kind: ValidatingWebhookConfiguration
