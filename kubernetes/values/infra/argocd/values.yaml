@@ -7,5 +7,5 @@ argo-cd:
       enabled: true
       parentRefs:
         - name: istio-gateway
-          namespace: istio-system 
+          namespace: istio-system
           sectionName: http
