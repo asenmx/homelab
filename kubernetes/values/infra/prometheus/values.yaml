@@ -12,7 +12,10 @@ kube-prometheus-stack:
                 storage: 50Gi
   grafana:
     deploymentStrategy:
-      type: Recreate
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
     persistence:
       enabled: true
       storageClassName: longhorn
