@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: promethues
+  name: prometheus
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "0"
@@ -10,10 +10,10 @@ spec:
   source:
     repoURL: https://github.com/asenmx/homelab.git
     targetRevision: test
-    path: kubernetes/charts/infra/promethues
+    path: kubernetes/charts/infra/prometheus
     helm:
       valueFiles:
-        - ../../../values/infra/promethues/values.yaml
+        - ../../../values/infra/prometheus/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring 
