@@ -2,7 +2,7 @@ resource "helm_release" "cilium" {
   name             = "cilium"
   repository       = "https://helm.cilium.io/"
   chart            = "cilium"
-  version          = "1.18.4"
+  version          = "1.18.5"
   namespace        = "kube-system"
   create_namespace = false
 
@@ -50,6 +50,10 @@ resource "helm_release" "cilium" {
     name  = "gatewayAPI.enabled"
     value = "true"
   }
+  set {
+    name  = "gatewayAPI.hostNetwork.enabled"
+    value = "true"
+  }
 
   set {
     name  = "gatewayAPI.enableAlpn"
@@ -59,6 +63,18 @@ resource "helm_release" "cilium" {
   set {
     name  = "gatewayAPI.enableAppProtocol"
     value = "true"
+  }
+  set {
+    name  = "kubeProxyReplacement"
+    value = "true"
+  }
+  set {
+    name  = "cluster.name"
+    value = "homelab"
+  }
+  set {
+    name  = "cni.exclusive"
+    value = "false"
   }
 }
 resource "helm_release" "argocd" {

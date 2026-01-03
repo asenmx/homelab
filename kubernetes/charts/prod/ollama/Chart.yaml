@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ollama 
+version: 0.0.0
+dependencies:
+  - name: app-template
+    version: 1.36.0
+    repository: https://bjw-s-labs.github.io/helm-charts

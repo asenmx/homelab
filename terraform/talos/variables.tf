@@ -24,6 +24,7 @@ variable "nodes" {
     interface = string
     address   = string
     type      = string # controlplane | worker
+    labels    = optional(map(string), {})
   }))
 }
 

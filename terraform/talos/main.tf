@@ -1,3 +1,29 @@
+data "talos_image_factory_extensions_versions" "this" {
+  talos_version = var.talos_version
+  filters = {
+    names = [
+      "siderolabs/iscsi-tools",
+      "siderolabs/util-linux-tools",
+    ]
+  }
+}
+resource "talos_image_factory_schematic" "this" {
+  schematic = yamlencode(
+    {
+      customization = {
+        systemExtensions = {
+          officialExtensions = data.talos_image_factory_extensions_versions.this.extensions_info.*.name
+        }
+      }
+    }
+  )
+}
+data "talos_image_factory_urls" "this" {
+  talos_version = var.talos_version
+  schematic_id  = talos_image_factory_schematic.this.id
+  platform      = "metal"
+}
+
 resource "talos_machine_secrets" "this" {
   talos_version = var.talos_version
 }
@@ -35,7 +61,7 @@ locals {
 
 data "talos_machine_configuration" "this" {
   for_each         = var.nodes
-  cluster_name     = var.cluster_name 
+  cluster_name     = var.cluster_name
   machine_type     = each.value.type
   cluster_endpoint = var.cluster_endpoint
   machine_secrets  = talos_machine_secrets.this.machine_secrets
@@ -43,6 +69,7 @@ data "talos_machine_configuration" "this" {
     yamlencode(local.common_machine_config),
     yamlencode({
       machine = {
+        nodeLabels = each.value.labels
         network = {
           interfaces = [
             {
@@ -67,11 +94,6 @@ data "talos_machine_configuration" "this" {
   ]
 }
 
-data "talos_client_configuration" "this" {
-  cluster_name         = "homelab"
-  client_configuration = talos_machine_secrets.this.client_configuration
-  nodes                = [var.nodes["cp1"].address]
-}
 
 resource "talos_machine_configuration_apply" "this" {
   for_each                    = var.nodes
@@ -86,7 +108,8 @@ resource "talos_machine_configuration_apply" "this" {
           interfaces = []
         }
         install = {
-          disk = "/dev/sda"
+          disk  = "/dev/sda"
+          image = data.talos_image_factory_urls.this.urls.disk_image
         }
       }
     }),
@@ -115,8 +138,19 @@ resource "talos_cluster_kubeconfig" "this" {
   node                 = var.nodes["cp1"].address
 }
 
+data "talos_client_configuration" "this" {
+  cluster_name         = "homelab"
+  client_configuration = talos_machine_secrets.this.client_configuration
+  nodes                = [var.nodes["cp1"].address]
+}
+
 resource "local_file" "kubeconfig" {
   content  = talos_cluster_kubeconfig.this.kubeconfig_raw
   filename = "${path.module}/kubeconfig"
+}
+
+resource "local_sensitive_file" "talosconfig" {
+  content  = data.talos_client_configuration.this.talos_config
+  filename = "${path.module}/talosconfig"
 }
 

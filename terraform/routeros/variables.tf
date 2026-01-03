@@ -71,4 +71,6 @@ variable "terraform_tag" {
   type    = string
   default = "[terraform]"
 }
-
+variable "k8s_nodes" {
+  type = list(string)
+}
