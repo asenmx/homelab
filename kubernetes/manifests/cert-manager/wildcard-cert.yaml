@@ -4,7 +4,7 @@ metadata:
   name: k8s-wildcard-tls
   namespace: istio-system
 spec:
-  secretName: k8s-wildcard-secret
+  secretName: root-ca-secret 
   duration: 2160h
   renewBefore: 720h
   dnsNames:
