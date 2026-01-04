@@ -13,7 +13,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: k8s-wildcard-secret
+      - name: istio-gw-cert 
     allowedRoutes:
       namespaces:
         from: Selector
