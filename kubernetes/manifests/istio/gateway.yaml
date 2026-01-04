@@ -6,6 +6,14 @@ metadata:
 spec:
   gatewayClassName: istio
   listeners:
+  - name: http
+    hostname: "*.k8s.labz"
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+
   - name: https
     hostname: "*.k8s.labz"
     port: 443
@@ -13,8 +21,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - group: ""
-        kind: Secret
+      - kind: Secret
         name: istio-ingress-tls
     allowedRoutes:
       namespaces:
