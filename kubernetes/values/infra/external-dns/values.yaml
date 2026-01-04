@@ -3,7 +3,7 @@ external-dns:
 
 
   interval: 5s
-  sources: ["ingress", "service", "crd", "gateway-httproute"]
+  sources: ["ingress", "service", "crd", "gateway-httproute", "istio-gateway" ]
   registry: txt
   txtOwnerId: default
   txtPrefix: k8s.
