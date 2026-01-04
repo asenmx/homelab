@@ -32,6 +32,12 @@ spec:
       helm:
         valueFiles:
           - ../../../../values/infra/istio/ztunnel/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: test
+      path: kubernetes/charts/infra/istio/kiali
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/kiali/values.yaml
     - repoURL: https://github.com/kubernetes-sigs/gateway-api
       targetRevision: release-1.4
       path: config/crd/standard

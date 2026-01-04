@@ -26,3 +26,4 @@ spec:
   - https://github.com/kubernetes-sigs/gateway-api
   - https://bitnami-labs.github.io/sealed-secrets
   - https://kubernetes-sigs.github.io/external-dns/
+  - https://kiali.org/helm-charts
