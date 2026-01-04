@@ -6,6 +6,9 @@ argo-cd:
     httproute:
       enabled: true
       parentRefs:
-        - name: istio-gateway
+        - kind: Gateway
+          group: gateway.networking.k8s.io
+          name: istio-gateway
           namespace: istio-system
           sectionName: https
+
