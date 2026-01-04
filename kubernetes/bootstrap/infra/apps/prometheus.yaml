@@ -14,6 +14,10 @@ spec:
     helm:
       valueFiles:
         - ../../../values/infra/prometheus/values.yaml
+  source:
+    repoURL: https://github.com/asenmx/homelab.git
+    targetRevision: test
+    path: kubernetes/manifests/promethues
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring 

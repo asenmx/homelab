@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: istio-prometheus
+spec:
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      release: istio
+  podMonitorSelector:
+    matchLabels:
+      release: istio
