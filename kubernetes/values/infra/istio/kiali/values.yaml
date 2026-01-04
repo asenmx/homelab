@@ -4,4 +4,4 @@ kiali-operator:
     namespace: istio-system
     spec:
       auth:
-      strategy: "anonymous"
+        strategy: "anonymous"
