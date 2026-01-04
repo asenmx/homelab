@@ -13,7 +13,7 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: istio-gw-cert 
+      - name: istio-ingress-tls 
     allowedRoutes:
       namespaces:
         from: Selector
