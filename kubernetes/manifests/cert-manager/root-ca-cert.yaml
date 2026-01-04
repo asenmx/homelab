@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: internal-root-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: internal-root-ca
+  secretName: internal-root-ca-secret
+  issuerRef:
+    name: root-ca-issuer
+    kind: ClusterIssuer
+
