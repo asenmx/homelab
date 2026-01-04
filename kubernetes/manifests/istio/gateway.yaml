@@ -18,7 +18,4 @@ spec:
         name: istio-ingress-tls
     allowedRoutes:
       namespaces:
-        from: Selector
-        selector:
-          matchLabels:
-            kubernetes.io/metadata.name: default
+        from: All
