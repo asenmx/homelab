@@ -1,19 +1,83 @@
+# ------------------------------------------------------------
+# ASEN-1: ztunnel (Ambient L4 data plane)
+# ------------------------------------------------------------
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: istio-envoy
-  namespace: monitoring   # <-- kube-prometheus-stack namespace
-  labels:
-    release: kube-prometheus-stack
+  name: asen-1-ztunnel
+  namespace: istio-system
+spec:
+  namespaceSelector:
+    matchNames:
+    - istio-system
+  selector:
+    matchLabels:
+      app: ztunnel
+  podMetricsEndpoints:
+  - port: ztunnel-stats
+    path: /metrics
+    interval: 15s
+
+---
+# ------------------------------------------------------------
+# ASEN-2: istiod (Istio control plane)
+# ------------------------------------------------------------
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: asen-2-istiod
+  namespace: istio-system
+spec:
+  namespaceSelector:
+    matchNames:
+    - istio-system
+  selector:
+    matchLabels:
+      istio: pilot
+  endpoints:
+  - port: http-monitoring
+    path: /metrics
+    interval: 15s
+
+---
+# ------------------------------------------------------------
+# ASEN-3: istio-cni-node (optional but useful)
+# ------------------------------------------------------------
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: asen-3-istio-cni
+  namespace: istio-system
+spec:
+  namespaceSelector:
+    matchNames:
+    - istio-system
+  selector:
+    matchLabels:
+      k8s-app: istio-cni-node
+  podMetricsEndpoints:
+  - targetPort: metrics
+    path: /metrics
+    interval: 15s
+
+---
+# ------------------------------------------------------------
+# ASEN-4: Waypoint proxies (Ambient L7 / HTTP visibility)
+# ------------------------------------------------------------
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: asen-4-waypoints
+  namespace: istio-system
 spec:
   namespaceSelector:
     any: true
   selector:
     matchExpressions:
-    - key: security.istio.io/tlsMode
+    - key: istio.io/waypoint-for
       operator: Exists
   podMetricsEndpoints:
-  - port: http-envoy-prom
-    path: /stats/prometheus
+  - port: http-monitoring
+    path: /metrics
     interval: 15s
 
