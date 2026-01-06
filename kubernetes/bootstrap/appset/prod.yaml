@@ -12,21 +12,6 @@ spec:
         revision: test
         directories:
           - path: kubernetes/charts/prod/*
-  strategy:
-    type: RollingSync
-    deletionOrder: Reverse
-    rollingSync:
-      steps:
-        - matchExpressions:
-            - key: chart
-              operator: In
-              values:
-                - ollama
-        - matchExpressions:
-            - key: chart
-              operator: In
-              values:
-                - jellyfin
   template:
     metadata:
       name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
@@ -34,13 +19,16 @@ spec:
         chart: '{{index .path.segments 3}}'
     spec:
       project: prod
-      source:
-        repoURL: https://github.com/asenmx/homelab.git
-        targetRevision: test
-        path: '{{.path.path}}'
-        helm:
-          valueFiles:
-            - '../../../values/prod/{{index .path.segments 3}}/values.yaml'
+      sources:
+        - repoURL: https://github.com/asenmx/homelab.git
+          targetRevision: test
+          path: '{{.path.path}}'
+          helm:
+            valueFiles:
+              - '../../../values/prod/{{index .path.segments 3}}/values.yaml'
+        - repoURL: https://github.com/asenmx/homelab.git
+          targetRevision: test
+          path: '../../manifests/{{index .path.segments 3}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{index .path.segments 3}}'
