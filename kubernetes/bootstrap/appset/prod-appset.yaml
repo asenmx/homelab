@@ -28,7 +28,7 @@ spec:
               - '../../../values/prod/{{index .path.segments 3}}/values.yaml'
         - repoURL: https://github.com/asenmx/homelab.git
           targetRevision: test
-          path: 'kubernetes/manifests/{{index .path.segments 3}}'
+          path: '/manifests/prod/{{index .path.segments 3}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{index .path.segments 3}}'
