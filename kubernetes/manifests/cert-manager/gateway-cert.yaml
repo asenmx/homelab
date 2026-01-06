@@ -10,4 +10,5 @@ spec:
     kind: ClusterIssuer
   dnsNames:
   - k8s.labz
+  - "*.k8s.labz" 
 
