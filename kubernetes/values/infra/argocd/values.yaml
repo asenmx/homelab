@@ -12,6 +12,6 @@ argo-cd:
           sectionName: https
       hostnames:
         - argo.k8s.labz
-    configs:
-      params:
-        server.insecure: true
+  configs:
+    params:
+      server.insecure: true
