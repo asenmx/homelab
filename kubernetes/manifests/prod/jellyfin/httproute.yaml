@@ -12,11 +12,10 @@ spec:
     namespace: istio-system
     sectionName: http
   rules:
-  - backendRefs:
-    kind: Service
-    name: prod-jellyfin
-    port: 80
-    matches:
+  - matches:
     - path:
         type: PathPrefix
         value: /
+    backendRefs:
+    - name: prod-jellyfin 
+      port: 80
