@@ -21,8 +21,9 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - kind: Secret
-        name: istio-ingress-tls
+      - group:
+        - kind: Secret
+          name: istio-ingress-tls
     allowedRoutes:
       namespaces:
         from: All
