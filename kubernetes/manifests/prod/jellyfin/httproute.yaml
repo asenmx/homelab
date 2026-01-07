@@ -10,7 +10,7 @@ spec:
     kind: Gateway
     name: istio-gateway
     namespace: istio-system
-    sectionName: http
+    sectionName: https
   rules:
   - matches:
     - path:
