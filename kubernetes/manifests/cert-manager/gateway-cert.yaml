@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: istio-gw-cert
+  namespace: istio-system
+spec:
+  secretName: istio-ingress-tls
+  issuerRef:
+    name: int-ca-issuer
+    kind: ClusterIssuer
+  dnsNames:
+  - k8s.labz
+  - "*.k8s.labz" 
+

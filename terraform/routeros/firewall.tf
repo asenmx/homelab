@@ -9,12 +9,12 @@ resource "routeros_ip_firewall_filter" "input_dns_udp" {
 }
 
 resource "routeros_ip_firewall_filter" "input_dns_tcp" {
-  chain             = "input"
-  action            = "accept"
-  protocol          = "tcp"
-  dst_port          = 53
-  comment           = "Allow DNS (TCP)"
-  place_before      = routeros_ip_firewall_filter.input_drop_not_lan.id
+  chain        = "input"
+  action       = "accept"
+  protocol     = "tcp"
+  dst_port     = 53
+  comment      = "Allow DNS (TCP)"
+  place_before = routeros_ip_firewall_filter.input_drop_not_lan.id
 }
 resource "routeros_ip_firewall_filter" "input_established" {
   chain            = "input"
@@ -125,3 +125,15 @@ resource "routeros_ip_firewall_nat" "rule" {
   dst_address = var.networks.kubernetes.cidr
   comment     = "[terraform] masq main pc to office"
 }
+resource "routeros_firewall_filter" "allow_bgp" {
+  for_each = toset(var.k8s_nodes)
+
+  chain        = "input"
+  protocol     = "tcp"
+  dst_port     = 179
+  src_address  = each.value
+  action       = "accept"
+  comment      = "[terraform] allow BGP from ${each.value}"
+  place_before = routeros_ip_firewall_filter.input_drop_not_lan.id
+}
+

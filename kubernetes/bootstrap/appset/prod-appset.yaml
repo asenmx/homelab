@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: prod
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/asenmx/homelab.git
+        revision: main
+        directories:
+          - path: kubernetes/charts/prod/*
+  template:
+    metadata:
+      name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
+      labels:
+        chart: '{{index .path.segments 3}}'
+    spec:
+      project: prod
+      sources:
+        - repoURL: https://github.com/asenmx/homelab.git
+          targetRevision: main
+          path: '{{.path.path}}'
+          helm:
+            valueFiles:
+              - '../../../values/prod/{{index .path.segments 3}}/values.yaml'
+        - repoURL: https://github.com/asenmx/homelab.git
+          targetRevision: main
+          path: '{{index .path.segments 0}}/manifests/prod/{{index .path.segments 3}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{index .path.segments 3}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+

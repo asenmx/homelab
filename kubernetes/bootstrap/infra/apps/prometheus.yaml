@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: infra
+  source:
+    repoURL: https://github.com/asenmx/homelab.git
+    targetRevision: main
+    path: kubernetes/charts/infra/prometheus
+    helm:
+      valueFiles:
+        - ../../../values/infra/prometheus/values.yaml
+  # source:
+  #   repoURL: https://github.com/asenmx/homelab.git
+  #   targetRevision: main
+  #   path: kubernetes/manifests/promethues
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring 
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

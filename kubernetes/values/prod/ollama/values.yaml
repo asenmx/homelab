@@ -1,0 +1,7 @@
+ollama:
+  gpu:
+    enabled: false 
+  models:
+    pull:
+      - mistral
+      - llama2

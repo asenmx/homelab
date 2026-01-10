@@ -1,0 +1,77 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: infra
+  sources:
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/charts/infra/istio/base
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/base/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/charts/infra/istio/istiod
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/istiod/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/charts/infra/istio/cni
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/cni/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/charts/infra/istio/ztunnel
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/ztunnel/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/charts/infra/istio/kiali
+      helm:
+        valueFiles:
+          - ../../../../values/infra/istio/kiali/values.yaml
+    - repoURL: https://github.com/kubernetes-sigs/gateway-api
+      targetRevision: release-1.4
+      path: config/crd/standard
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main 
+      path: kubernetes/manifests/istio/
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istio-validator-istio-system
+      jsonPointers:
+        - /webhooks/0/failurePolicy
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istiod-default-validator
+      jsonPointers:
+        - /webhooks/0/failurePolicy
+    - group: apps
+      kind: DaemonSet
+      name: ztunnel
+      jqPathExpressions:
+        - '.spec.template.spec.containers[].env[]?.valueFrom.resourceFieldRef.divisor'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/audit: privileged
+        pod-security.kubernetes.io/warn: privileged

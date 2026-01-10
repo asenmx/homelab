@@ -1,0 +1,17 @@
+argo-cd:
+  global:
+    domain: argo.k8s.labz
+  server:
+    httproute:
+      enabled: true
+      parentRefs:
+        - kind: Gateway
+          group: gateway.networking.k8s.io
+          name: istio-gateway
+          namespace: istio-system
+          sectionName: https
+      hostnames:
+        - argo.k8s.labz
+  configs:
+    params:
+      server.insecure: true
