@@ -9,7 +9,7 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/asenmx/homelab.git
-        revision: test
+        revision: main
         directories:
           - path: kubernetes/charts/prod/*
   template:
@@ -21,13 +21,13 @@ spec:
       project: prod
       sources:
         - repoURL: https://github.com/asenmx/homelab.git
-          targetRevision: test
+          targetRevision: main
           path: '{{.path.path}}'
           helm:
             valueFiles:
               - '../../../values/prod/{{index .path.segments 3}}/values.yaml'
         - repoURL: https://github.com/asenmx/homelab.git
-          targetRevision: test
+          targetRevision: main
           path: '{{index .path.segments 0}}/manifests/prod/{{index .path.segments 3}}'
       destination:
         server: https://kubernetes.default.svc

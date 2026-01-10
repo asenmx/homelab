@@ -9,14 +9,14 @@ spec:
   project: infra
   source:
     repoURL: https://github.com/asenmx/homelab.git
-    targetRevision: test
+    targetRevision: main
     path: kubernetes/charts/infra/prometheus
     helm:
       valueFiles:
         - ../../../values/infra/prometheus/values.yaml
   # source:
   #   repoURL: https://github.com/asenmx/homelab.git
-  #   targetRevision: test
+  #   targetRevision: main
   #   path: kubernetes/manifests/promethues
   destination:
     server: https://kubernetes.default.svc

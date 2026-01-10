@@ -9,7 +9,7 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/asenmx/homelab.git
-        revision: test
+        revision: main
         directories:
           - path: kubernetes/charts/infra/*
           - path: kubernetes/manifests/*/*
@@ -22,7 +22,7 @@ spec:
       project: infra
       source:
         repoURL: https://github.com/asenmx/homelab.git
-        targetRevision: test
+        targetRevision: main
         path: '{{.path.path}}'
         helm:
           valueFiles:

@@ -9,7 +9,7 @@ spec:
   project: infra
   source:
     repoURL: https://github.com/asenmx/homelab.git
-    targetRevision: test
+    targetRevision: main
     path: kubernetes/charts/infra/cert-manager
     helm:
       valueFiles:

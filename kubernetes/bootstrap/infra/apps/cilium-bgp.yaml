@@ -9,7 +9,7 @@ spec:
   project: infra
   source:
     repoURL: https://github.com/asenmx/homelab.git
-    targetRevision: test
+    targetRevision: main
     path: kubernetes/manifests/cilium
   destination:
     server: https://kubernetes.default.svc

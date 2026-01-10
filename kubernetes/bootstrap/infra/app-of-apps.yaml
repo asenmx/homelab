@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/asenmx/homelab.git
-    targetRevision: test
+    targetRevision: main
     path: kubernetes/bootstrap/infra/apps 
     directory:
       recurse: false           
