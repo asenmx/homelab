@@ -1,38 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
+kind: AppProject
 metadata:
-  name: infra
+  name: dev 
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
-  generators:
-    - git:
-        repoURL: https://github.com/asenmx/homelab.git
-        revision: main
-        directories:
-          - path: kubernetes/charts/infra/*
-          - path: kubernetes/manifests/*/*
-  template:
-    metadata:
-      name: '{{index .path.segments 3}}'
-      labels:
-        type: '{{if contains .path.path "charts"}}helm{{else}}yaml{{end}}'
-    spec:
-      project: infra
-      source:
-        repoURL: https://github.com/asenmx/homelab.git
-        targetRevision: main
-        path: '{{.path.path}}'
-        helm:
-          valueFiles:
-            - '../../../values/infra/{{index .path.segments 3}}/prod.yaml'
-      destination:
-        server: https://kubernetes.default.svc
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  description: Infrastructure project
+  destinations:
+  - name: '*'
+    namespace: '*'
+    server: https://kubernetes.default.svc
+  namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  sourceRepos:
+    - https://charts.alekc.dev/
+    - https://github.com/asenmx/homelab
