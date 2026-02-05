@@ -1,0 +1,32 @@
+apiVersion: argocdproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-image-updater
+  namespace: argocd
+  annotations:
+    argocdcd.argocdproj.io/sync-wave: "0"
+spec:
+  project: infra
+  source:
+    repoURL: https://github.com/asenmx/homelab.git
+    targetRevision: main
+    path: kubernetes/charts/infra/argocd-image-updater
+    helm:
+      valueFiles:
+        - ../../../values/infra/argocd-image-updater/values.yaml
+  ignoreDifferences:
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocdcd 
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+
