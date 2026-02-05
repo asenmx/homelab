@@ -1,4 +1,0 @@
-caddy:
-  image:
-    repository: caddy
-    tag: "2.9.0"

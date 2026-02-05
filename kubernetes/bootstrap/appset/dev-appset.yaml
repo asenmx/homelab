@@ -20,7 +20,6 @@ spec:
       labels:
         chart: '{{index .path.segments 3}}'
       annotations:
-        # watch one image per chart
         argocd-image-updater.argoproj.io/image-list: >
           app=ghcr.io/asenmx/{{index .path.segments 3}}
 
