@@ -18,5 +18,5 @@ spec:
   - group: '*'
     kind: '*'
   sourceRepos:
-    - https://charts.alekc.dev/
+    - https://charts.bitnami.com/bitnami
     - https://github.com/asenmx/homelab
