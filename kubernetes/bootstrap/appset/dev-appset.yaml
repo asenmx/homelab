@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: dev-image-updater-poc
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+
+  generators:
+    - git:
+        repoURL: https://github.com/asenmx/homelab.git
+        revision: main
+        directories:
+          - path: kubernetes/charts/dev/*
+
+  template:
+    metadata:
+      name: '{{index .path.segments 2}}-{{index .path.segments 3}}'
+      labels:
+        chart: '{{index .path.segments 3}}'
+      annotations:
+        # watch one image per chart
+        argocd-image-updater.argoproj.io/image-list: >
+          app=ghcr.io/asenmx/{{index .path.segments 3}}
+
+        argocd-image-updater.argoproj.io/app.update-strategy: semver
+        argocd-image-updater.argoproj.io/write-back-method: argocd
+        argocd-image-updater.argoproj.io/app.helm.image-tag: image.tag
+
+    spec:
+      project: dev
+
+      source:
+        repoURL: https://github.com/asenmx/homelab.git
+        targetRevision: main
+        path: '{{.path.path}}'
+        helm:
+          valueFiles:
+            - '../../../values/dev/{{index .path.segments 3}}/values.yaml'
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{index .path.segments 3}}'
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+

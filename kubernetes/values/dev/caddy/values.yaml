@@ -1,0 +1,4 @@
+caddy:
+  image:
+    repository: caddy
+    tag: "2.7.7"
