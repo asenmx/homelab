@@ -12,11 +12,8 @@ service:
   port: 8081
 
 httpRoute:
-  # HTTPRoute enabled.
-  enabled: false
-  # HTTPRoute annotations.
+  enabled: true 
   annotations: {}
-  # Which Gateways this Route is attached to.
   parentRefs:
   - name: istio-gateway
     sectionName: http
