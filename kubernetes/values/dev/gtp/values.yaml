@@ -3,10 +3,9 @@ image:
   pullPolicy: IfNotPresent
   tag: 546aadd0b7c4521008ebc2bdf868d7708dc39e25 
 
-imagePullSecrets: []
-# This is to override the chart name.
-nameOverride: ""
-fullnameOverride: ""
+imagePullSecrets:
+- name: regcred
+
 
 service:
   type: ClusterIP
