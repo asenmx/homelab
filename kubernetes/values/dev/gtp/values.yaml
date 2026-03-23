@@ -1,7 +1,7 @@
 image:
   repository: asnm/gtp-poc 
   pullPolicy: IfNotPresent
-  tag: 4ec34985a1256c61018d49e2cc74e174dfd83c49 
+  tag: acb790ab1d87e36f9901d492062bab346a32d5d7
 
 imagePullSecrets:
 - name: regcred
