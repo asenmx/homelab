@@ -17,6 +17,7 @@ httpRoute:
   parentRefs:
   - name: istio-gateway
     sectionName: http
+    namespace: istio-system
   hostnames:
   - gtp.k8s.labz
   rules:
