@@ -23,13 +23,13 @@ httpRoute:
   - matches:
     - path:
         type: PathPrefix
-        value: /headers
+        value: /
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: 8081
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: 8081
 
