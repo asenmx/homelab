@@ -1,7 +1,7 @@
 image:
   repository: asnm/gtp-poc 
   pullPolicy: IfNotPresent
-  tag: sha-a1298c2
+  tag: sha-e15301d
 
 imagePullSecrets:
 - name: regcred
