@@ -7,13 +7,16 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   project: infra
-  source:
-    repoURL: https://github.com/asenmx/homelab.git
-    targetRevision: main
-    path: kubernetes/charts/infra/argocd
-    helm:
-      valueFiles:
-        - ../../../values/infra/argocd/values.yaml
+  sources:
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/charts/infra/argocd
+      helm:
+        valueFiles:
+          - ../../../values/infra/argocd/values.yaml
+    - repoURL: https://github.com/asenmx/homelab.git
+      targetRevision: main
+      path: kubernetes/manifests/argocd
   ignoreDifferences:
   - group: rbac.authorization.k8s.io
     kind: Role
