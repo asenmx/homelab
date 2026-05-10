@@ -1,0 +1,10 @@
+apiVersion: v2
+name: falkordb
+version: 0.0.0
+dependencies:
+  - name: kubeblocks
+    version: 1.0.2
+    repository: https://apecloud.github.io/helm-charts 
+  - name: falkordb
+    version: 1.0.2
+    repository: https://apecloud.github.io/helm-charts 
